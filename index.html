@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Calculator - Professional Health Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Calorie Calculator</h1>
+            <p>Calculate your daily calorie needs for weight loss, maintenance, and weight gain</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Input Form -->
+            <div class="calculator-section">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Your Information</h2>
+                        
+                        <form id="calorieForm" class="form">
+                            <!-- Error Messages -->
+                            <div id="errorMessages" class="error-container hidden"></div>
+
+                            <!-- Gender Selection -->
+                            <div class="form-group">
+                                <label class="form-label">Gender *</label>
+                                <div class="gender-buttons">
+                                    <label class="gender-option">
+                                        <input type="radio" name="gender" value="male" required>
+                                        <span class="gender-button">Male</span>
+                                    </label>
+                                    <label class="gender-option">
+                                        <input type="radio" name="gender" value="female" required>
+                                        <span class="gender-button">Female</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Age -->
+                            <div class="form-group">
+                                <label for="age" class="form-label">Age (years) *</label>
+                                <input type="number" id="age" class="form-control form-control--large" 
+                                       min="10" max="120" required placeholder="Enter your age" 
+                                       inputmode="numeric">
+                            </div>
+
+                            <!-- Height in cm only -->
+                            <div class="form-group">
+                                <label for="height" class="form-label">Height (cm) *</label>
+                                <div class="input-with-unit">
+                                    <input type="number" id="height" class="form-control form-control--large" 
+                                           min="100" max="250" placeholder="Enter your height" required
+                                           inputmode="numeric">
+                                    <span class="unit-label">cm</span>
+                                </div>
+                            </div>
+
+                            <!-- Weight in kg only -->
+                            <div class="form-group">
+                                <label for="weight" class="form-label">Weight (kg) *</label>
+                                <div class="input-with-unit">
+                                    <input type="number" id="weight" class="form-control form-control--large" 
+                                           min="30" max="300" step="0.1" placeholder="Enter your weight" required
+                                           inputmode="decimal">
+                                    <span class="unit-label">kg</span>
+                                </div>
+                            </div>
+
+                            <!-- Activity Level -->
+                            <div class="form-group">
+                                <label for="activityLevel" class="form-label">Activity Level *</label>
+                                <select id="activityLevel" class="form-control form-control--large" required>
+                                    <option value="">Select your activity level</option>
+                                    <option value="1.2">Sedentary - Little to no exercise, desk job</option>
+                                    <option value="1.375">Lightly Active - Light exercise 1-3 days/week</option>
+                                    <option value="1.55">Moderately Active - Moderate exercise 3-5 days/week</option>
+                                    <option value="1.725">Very Active - Hard exercise 6-7 days/week</option>
+                                    <option value="1.9">Extremely Active - Very hard exercise & physical job</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn--primary btn--large btn--full-width">
+                                Calculate My Calories
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section - Hidden by default -->
+            <div class="results-section hidden" id="resultsSection">
+                <!-- BMI Display -->
+                <div class="bmi-card card">
+                    <div class="card__body">
+                        <h3>Your BMI & Health Status</h3>
+                        <div class="bmi-result">
+                            <span class="bmi-value" id="bmiValue">-</span>
+                            <span class="bmi-category" id="bmiCategory">-</span>
+                        </div>
+                        <p class="bmi-advice" id="bmiAdvice">-</p>
+                    </div>
+                </div>
+
+                <!-- Health Recommendations -->
+                <div class="health-info card">
+                    <div class="card__body">
+                        <h3>Daily Health Recommendations</h3>
+                        <div class="health-grid">
+                            <div class="health-item">
+                                <strong>Water Intake:</strong>
+                                <span id="waterIntake">-</span>
+                            </div>
+                            <div class="health-item">
+                                <strong>Protein Needs:</strong>
+                                <span id="proteinNeeds">-</span>
+                            </div>
+                            <div class="health-item">
+                                <strong>Meal Frequency:</strong>
+                                <span>3 main meals + 1-2 healthy snacks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calorie Results -->
+                <div class="results-grid">
+                    <!-- Weight Loss Table -->
+                    <div class="result-table card">
+                        <div class="card__header">
+                            <h3>Weight Loss Goals</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="calorie-results" id="weightLossResults">
+                                <div class="calorie-row maintenance">
+                                    <span class="goal-label">To Maintain Weight<br><small>0 kg/week</small></span>
+                                    <span class="calorie-value" id="maintainCalories">- cal/day</span>
+                                </div>
+                                <div class="calorie-row mild-loss">
+                                    <span class="goal-label">Mild Weight Loss<br><small>0.25 kg/week</small></span>
+                                    <span class="calorie-value" id="mildLossCalories">- cal/day</span>
+                                </div>
+                                <div class="calorie-row weight-loss">
+                                    <span class="goal-label">Weight Loss<br><small>0.5 kg/week</small></span>
+                                    <span class="calorie-value" id="weightLossCalories">- cal/day</span>
+                                </div>
+                                <div class="calorie-row extreme-loss">
+                                    <span class="goal-label">Extreme Weight Loss<br><small>1 kg/week</small></span>
+                                    <span class="calorie-value" id="extremeLossCalories">- cal/day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weight Gain Table -->
+                    <div class="result-table card">
+                        <div class="card__header">
+                            <h3>Weight Gain Goals</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="calorie-results" id="weightGainResults">
+                                <div class="calorie-row slow-gain">
+                                    <span class="goal-label">Slow Weight Gain<br><small>0.25 kg/week</small></span>
+                                    <span class="calorie-value" id="slowGainCalories">- cal/day</span>
+                                </div>
+                                <div class="calorie-row moderate-gain">
+                                    <span class="goal-label">Moderate Weight Gain<br><small>0.5 kg/week</small></span>
+                                    <span class="calorie-value" id="moderateGainCalories">- cal/day</span>
+                                </div>
+                                <div class="calorie-row fast-gain">
+                                    <span class="goal-label">Fast Weight Gain<br><small>1 kg/week</small></span>
+                                    <span class="calorie-value" id="fastGainCalories">- cal/day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Macronutrient Breakdown -->
+                <div class="macro-breakdown card">
+                    <div class="card__body">
+                        <h3>Recommended Macronutrient Distribution (for weight maintenance)</h3>
+                        <div class="macro-grid">
+                            <div class="macro-item">
+                                <div class="macro-label">Protein (25%)</div>
+                                <div class="macro-value" id="proteinCalories">- calories</div>
+                                <div class="macro-grams" id="proteinGrams">- grams</div>
+                            </div>
+                            <div class="macro-item">
+                                <div class="macro-label">Carbohydrates (45%)</div>
+                                <div class="macro-value" id="carbCalories">- calories</div>
+                                <div class="macro-grams" id="carbGrams">- grams</div>
+                            </div>
+                            <div class="macro-item">
+                                <div class="macro-label">Fats (30%)</div>
+                                <div class="macro-value" id="fatCalories">- calories</div>
+                                <div class="macro-grams" id="fatGrams">- grams</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Tips -->
+                <div class="health-tips card">
+                    <div class="card__body">
+                        <h3>Important Health Tips</h3>
+                        <ul class="tips-list">
+                            <li><strong>Safe Weight Loss:</strong> Aim for 0.25-0.5 kg per week for sustainable results</li>
+                            <li><strong>Extreme Warning:</strong> Losing more than 1kg per week is not recommended for long-term health</li>
+                            <li><strong>Hydration:</strong> Drink water throughout the day, especially before meals</li>
+                            <li><strong>Exercise:</strong> Combine calorie management with regular physical activity</li>
+                            <li><strong>Sleep:</strong> Get 7-9 hours of quality sleep for optimal metabolism</li>
+                            <li><strong>Medical Advice:</strong> Consult healthcare providers before major dietary changes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="disclaimer card">
+                    <div class="card__body">
+                        <p><strong>Medical Disclaimer:</strong> This calculator provides estimates based on standard formulas (Mifflin-St Jeor equation). 
+                        Individual metabolic rates, medical conditions, and nutritional needs may vary significantly. 
+                        Always consult with a qualified healthcare professional, registered dietitian, or certified nutritionist 
+                        before making significant changes to your diet, exercise routine, or weight management plan, especially if you have 
+                        pre-existing health conditions, are pregnant, breastfeeding, or taking medications.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
